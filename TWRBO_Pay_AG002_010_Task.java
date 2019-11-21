@@ -44,7 +44,7 @@ public class TWRBO_Pay_AG002_010_Task extends AbstractEBMWBaseTask<TWRBO_Pay_AG0
 
 		EBMWUser user = getLoginUser333();
 		if (isLoggedIn() && !user.isSimpleIdentify()) {
-			rsData.setIsWebLoggin(false);
+			rsData.setIsWebLoggin(true);
 		}
 
 		TWRBO_Pay_AG002_TxnData txnData = this.getCache(TWRBO_Pay_AG002_Utils.CACHE_KEY_PAY_AG002, TWRBO_Pay_AG002_TxnData.class);
@@ -60,12 +60,17 @@ public class TWRBO_Pay_AG002_010_Task extends AbstractEBMWBaseTask<TWRBO_Pay_AG0
 		txnData.setCities(twrbcPayAg006Utils.getAllCities());
 		rsData.setCarCities(twrbcPayAg006Utils.getAllCities());
 		rsData.setMotorCities(twrbcPayAg006Utils.getAllMotorCities());
+		
+		// SIT問題單#19105 edit by wayne 2019/06/19
+		String sMarketingTimeout = cacheManager.getValue("Marketing_timeout");
+		logger.debug("sMarketingTimeout=" + sMarketingTimeout);
+		rsData.setMarketingTimeout(ConvertUtils.str2Int(sMarketingTimeout));
 
 		// 編輯頁可切換繳費類別，故傳回繳費類別清單
 		rsData.setAllBillType(txnData.getAllBillType());
 		rsData.setBillType(txnData.getBillType());
 
-		this.setCache(TWRBO_Pay_AG002_Utils.CACHE_KEY_PAY_AG0021, txnData);
+		this.setCache(TWRBO_Pay_AG002_Utils.CACHE_KEY_PAY_AG002, txnData);
 
 	}
 	
@@ -86,7 +91,7 @@ public class TWRBO_Pay_AG002_010_Task extends AbstractEBMWBaseTask<TWRBO_Pay_AG0
 		} catch (ActionException e2) {
 			// 若是 9994 使用者未登入，轉換成 9917 後抛出
 			if (e1.getErrorCode().equals(CommonErrorCode.USER_NOT_LOGIN.getErrorCode())) {
-				throw ExceptionUtils.getActionException(CommonErrorCode.USER_NOT_LOGIN);
+				throw ExceptionUtils.getActionException(CommonErrorCode.SIMPLE_USER_NOT_LOGIN);
 			} else {
 				throw e;
 			}
