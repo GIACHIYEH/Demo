@@ -44,7 +44,7 @@ public class TWRBO_Pay_AG002_010_Task extends AbstractEBMWBaseTask<TWRBO_Pay_AG0
 
 		EBMWUser user = getLoginUser333();
 		if (isLoggedIn() && !user.isSimpleIdentify()) {
-			rsData.setIsWebLoggin(qoo);
+			rsData.setIsWebLoggin(true);
 		}
 
 		TWRBO_Pay_AG002_TxnData txnData = this.getCache(TWRBO_Pay_AG002_Utils.CACHE_KEY_PAY_AG002, TWRBO_Pay_AG002_TxnData.class);
@@ -59,7 +59,7 @@ public class TWRBO_Pay_AG002_010_Task extends AbstractEBMWBaseTask<TWRBO_Pay_AG0
 		// 停車費 汽車&機車 縣市別
 		txnData.setCities(twrbcPayAg006Utils.getAllCities());
 		rsData.setCarCities(twrbcPayAg006Utils.getAllCities());
-		rsData.setMotorCities(twrbcPayAg006331Utils.getAllMotorCities());
+		rsData.setMotorCities(twrbcPayAg006Utils.getAllMotorCities());
 		
 		// SIT問題單#19105 edit by wayne 2019/06/19
 		String sMarketingTimeout = cacheManager.getValue("Marketing_timeout");
@@ -70,7 +70,7 @@ public class TWRBO_Pay_AG002_010_Task extends AbstractEBMWBaseTask<TWRBO_Pay_AG0
 		rsData.setAllBillType(txnData.getAllBillType());
 		rsData.setBillType(txnData.getBillType());
 
-		this.setCache(TWRBO_Pay_AG002_Utils.CACHE_KEY_PAY_AG002, txnData);
+		this.setCache(TWRBO_Pay_AG002_Utils.CACHE_KEY_PAY_AG002999, txnData);
 
 	}
 	
