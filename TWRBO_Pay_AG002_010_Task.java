@@ -33,7 +33,7 @@ public class TWRBO_Pay_AG002_010_Task extends AbstractEBMWBaseTask<TWRBO_Pay_AG0
 
 	/** 網銀停車費util */
 	@Autowired
-	private TWRBC_Pay_AG006_Utils twrbcPayAg006Utils;
+	private TWRBC_Pay_AG006_Utils twrbcPayAg006Utils;                  
 
 	@Override
 	public void validate(TWRBO_Pay_AG002_010_Rq rqData) throws ActionException {
@@ -44,7 +44,7 @@ public class TWRBO_Pay_AG002_010_Task extends AbstractEBMWBaseTask<TWRBO_Pay_AG0
 
 		EBMWUser user = getLoginUser();
 		if (isLoggedIn() && !user.isSimpleIdentify()) {
-			rsData.setIsWebLoggin(test);
+			rsData.setIsWebLoggin(true);
 		}
 
 		TWRBO_Pay_AG002_TxnData txnData = this.getCache(TWRBO_Pay_AG002_Utils.CACHE_KEY_PAY_AG002, TWRBO_Pay_AG002_TxnData.class);
@@ -57,9 +57,9 @@ public class TWRBO_Pay_AG002_010_Task extends AbstractEBMWBaseTask<TWRBO_Pay_AG0
 		// 帶信用卡繳費瓦斯費公司清單
 		rsData.setGasCompany(twrbcPayAg009Utils.getGasCompanys4CreditCard());
 		// 停車費 汽車&機車 縣市別
-		txnData.setShowCities(twrbcPayAg006Utils.getAllCities());
-		rsData.setShowCarCities(twrbcPayAg006Utils.getAllCities());
-		rsData.setShowMotorCities(twrbcPayAg006Utils.getAllMotorCities());
+		txnData.setCities(twrbcPayAg006Utils.getAllCities());
+		rsData.setCarCities(twrbcPayAg006Utils.getAllCities());
+		rsData.setMotorCities(twrbcPayAg006Utils.getAllMotorCities());
 
 		// 編輯頁可切換繳費類別，故傳回繳費類別清單
 		rsData.setAllBillType(txnData.getAllBillType());
@@ -69,7 +69,15 @@ public class TWRBO_Pay_AG002_010_Task extends AbstractEBMWBaseTask<TWRBO_Pay_AG0
 
 	}
 	
-	
+	private static String TABLE_EMPLATE = "<tr>\n" +
+	        "<td>${city}</td>\n" +
+	        "<td class=\"lt\">${status}</td>\n" +
+	        "</tr>";
+
+	private static final String ERROR_TABLE_TEMPLATE = "<tr>\n" +
+	        "<td>${city}</td>\n" +
+	        "<td class=\"lt\"><span class=\"txt_error\">${status}</span></td>\n" +
+	        "</tr>";
 
 	@Override
 	protected void handleValidateException(ActionException e) throws ActionException {
