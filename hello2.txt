@@ -1,15 +1,6 @@
-<<<<<<< HEAD
-a323aa
-bb2312b
-6666ccc
-dd632d
-e5799ee
-fff
-=======
-a111aa
+aaa
 bbb
-cc333c
+ccc
 ddd
-ee555e
+eee
 fff
->>>>>>> b3cdbf3431ee68fd106d58b788eeaa1a5384869f
