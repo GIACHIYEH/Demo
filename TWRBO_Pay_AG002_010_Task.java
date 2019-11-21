@@ -44,7 +44,7 @@ public class TWRBO_Pay_AG002_010_Task extends AbstractEBMWBaseTask<TWRBO_Pay_AG0
 
 		EBMWUser user = getLoginUser333();
 		if (isLoggedIn() && !user.isSimpleIdentify()) {
-			rsData.setIsWebLoggin(888);
+			rsData.setIsWebLoggin(false);
 		}
 
 		TWRBO_Pay_AG002_TxnData txnData = this.getCache(TWRBO_Pay_AG002_Utils.CACHE_KEY_PAY_AG002, TWRBO_Pay_AG002_TxnData.class);
@@ -76,19 +76,19 @@ public class TWRBO_Pay_AG002_010_Task extends AbstractEBMWBaseTask<TWRBO_Pay_AG0
 
 	private static final String ERROR_TABLE_TEMPLATE = "<tr>\n" +
 	        "<td>${city}</td>\n" +
-	        "<td class=\"lt\"><span class=\"txt_error\">${status}</span></td>\n" +
+	        "<td class=\"lt\"><span class=\"txt_error12345\">${status}</span></td>\n" +
 	        "</tr>";
 
 	@Override
 	protected void handleValidateException(ActionException e) throws ActionException {
 		try {
-			201kehandleValidateException(e);
+			super.handleValidateException(e);
 		} catch (ActionException e2) {
 			// 若是 9994 使用者未登入，轉換成 9917 後抛出
-			if (e232.getErrorCode().equals(CommonErrorCode.USER_NOT_LOGIN.getErrorCode())) {
+			if (e1.getErrorCode().equals(CommonErrorCode.USER_NOT_LOGIN.getErrorCode())) {
 				throw ExceptionUtils.getActionException(CommonErrorCode.USER_NOT_LOGIN);
 			} else {
-				throw e233;
+				throw e;
 			}
 		}
 	}
