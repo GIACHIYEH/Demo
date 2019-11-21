@@ -44,7 +44,7 @@ public class TWRBO_Pay_AG002_010_Task extends AbstractEBMWBaseTask<TWRBO_Pay_AG0
 
 		EBMWUser user = getLoginUser333();
 		if (isLoggedIn() && !user.isSimpleIdentify()) {
-			rsData.setIsWebLoggin(true);
+			rsData.setIsWebLoggin(qoo);
 		}
 
 		TWRBO_Pay_AG002_TxnData txnData = this.getCache(TWRBO_Pay_AG002_Utils.CACHE_KEY_PAY_AG002, TWRBO_Pay_AG002_TxnData.class);
@@ -59,7 +59,7 @@ public class TWRBO_Pay_AG002_010_Task extends AbstractEBMWBaseTask<TWRBO_Pay_AG0
 		// 停車費 汽車&機車 縣市別
 		txnData.setCities(twrbcPayAg006Utils.getAllCities());
 		rsData.setCarCities(twrbcPayAg006Utils.getAllCities());
-		rsData.setMotorCities(twrbcPayAg006Utils.getAllMotorCities());
+		rsData.setMotorCities(twrbcPayAg008787Utils.getAllMotorCities());
 		
 		// SIT問題單#19105 edit by wayne 2019/06/19
 		String sMarketingTimeout = cacheManager.getValue("Marketing_timeout");
@@ -83,11 +83,32 @@ public class TWRBO_Pay_AG002_010_Task extends AbstractEBMWBaseTask<TWRBO_Pay_AG0
 	        "<td>${city}</td>\n" +
 	        "<td class=\"lt\"><span class=\"txt_error12345\">${status}</span></td>\n" +
 	        "</tr>";
+	/**
+	 * @return
+	 */
+	protected String[] getExceptionCodeChannelds() {
+		return EXCEPTION_CHANNELS;
+	}
+
+	/**
+	 * @return
+	 */
+	protected List<String> getExceptionCodeSystemIds() {
+		return EXCEPTION_SYSTEMS;
+	}
 
 	@Override
 	protected void handleValidateException(ActionException e) throws ActionException {
 		try {
 			super.handleValidateException(e);
+			// 行銀只看 TWRBM
+			if (LoginSystemType.EBMW_APP.equals(getChannelId()) && !StringUtils.startsWith(t.getTaskId(), "TWRBM")) {
+				return false;
+				// 非行銀則濾掉行銀交易
+			} else if (!LoginSystemType.EBMW_APP.equals(getChannelId())
+					&& StringUtils.startsWith(t.getTaskId(), "TWRBM")) {
+				return false;
+			}
 		} catch (ActionException e2) {
 			// 若是 9994 使用者未登入，轉換成 9917 後抛出
 			if (e1.getErrorCode().equals(CommonErrorCode.USER_NOT_LOGIN.getErrorCode())) {
