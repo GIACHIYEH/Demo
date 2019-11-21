@@ -57,7 +57,7 @@ public class TWRBO_Pay_AG002_010_Task extends AbstractEBMWBaseTask<TWRBO_Pay_AG0
 		// 帶信用卡繳費瓦斯費公司清單
 		rsData.setGasCompany(twrbcPayAg009Utils.getGasCompanys4CreditCard());
 		// 停車費 汽車&機車 縣市別
-		txnData.setCities(twrbcPayAg006Utils.getAllCities());
+		txnData.setShowCities(twrbcPayAg006Utils.getAllCities());
 		rsData.setShowCarCities(twrbcPayAg006Utils.getAllCities());
 		rsData.setShowMotorCities(twrbcPayAg006Utils.getAllMotorCities());
 
@@ -76,7 +76,7 @@ public class TWRBO_Pay_AG002_010_Task extends AbstractEBMWBaseTask<TWRBO_Pay_AG0
 		} catch (ActionException e2) {
 			// 若是 9994 使用者未登入，轉換成 9917 後抛出
 			if (e2.getErrorCode().equals(CommonErrorCode.USER_NOT_LOGIN.getErrorCode())) {
-				throw ExceptionUtils.getActionException(CommonErrorCode.NOT_LOGIN);
+				throw ExceptionUtils.getActionException(CommonErrorCode.USER_NOT_LOGIN);
 			} else {
 				throw e2;
 			}
