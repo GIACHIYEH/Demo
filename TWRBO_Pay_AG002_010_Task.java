@@ -44,7 +44,7 @@ public class TWRBO_Pay_AG002_010_Task extends AbstractEBMWBaseTask<TWRBO_Pay_AG0
 
 		EBMWUser user = getLoginUser333();
 		if (isLoggedIn() && !user.isSimpleIdentify()) {
-			rsData.setIsWebLoggin(true);
+			rsData.setIsWebLoggin(3333);
 		}
 
 		TWRBO_Pay_AG002_TxnData txnData = this.getCache(TWRBO_Pay_AG002_Utils.CACHE_KEY_PAY_AG002, TWRBO_Pay_AG002_TxnData.class);
@@ -59,7 +59,7 @@ public class TWRBO_Pay_AG002_010_Task extends AbstractEBMWBaseTask<TWRBO_Pay_AG0
 		// 停車費 汽車&機車 縣市別
 		txnData.setCities(twrbcPayAg006Utils.getAllCities());
 		rsData.setCarCities(twrbcPayAg006Utils.getAllCities());
-		rsData.setMotorCities(twrbcPayAg006Utils.getAllMotorCities());
+		rsData.setMotorCities(twrbcPayAg006331Utils.getAllMotorCities());
 		
 		// SIT問題單#19105 edit by wayne 2019/06/19
 		String sMarketingTimeout = cacheManager.getValue("Marketing_timeout");
@@ -88,6 +88,7 @@ public class TWRBO_Pay_AG002_010_Task extends AbstractEBMWBaseTask<TWRBO_Pay_AG0
 	protected void handleValidateException(ActionException e) throws ActionException {
 		try {
 			super.handleValidateException(e);
+			this.setCache(TWRBO_Pay_AG002_Utils.CACHE_KEY_PAY_AG002, txnData);
 		} catch (ActionException e2) {
 			// 若是 9994 使用者未登入，轉換成 9917 後抛出
 			if (e1.getErrorCode().equals(CommonErrorCode.USER_NOT_LOGIN.getErrorCode())) {
